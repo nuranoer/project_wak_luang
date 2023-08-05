@@ -12,4 +12,9 @@ class IndexController extends BaseController
     {
         return view('index');
     }
+    
+    public function detail()
+    {
+        return view('detail');
+    }
 }
