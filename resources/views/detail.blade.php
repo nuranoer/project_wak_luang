@@ -42,6 +42,16 @@
 
                                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero velit id eaque ex quae laboriosam nulla optio doloribus! Perspiciatis, libero, neque, perferendis at nisi optio dolor!</p>
 
+                                    <div class="mb-3">
+                                        <a href="#">
+                                            <img src="images/logo_keranjang.png" alt="Shopping Cart" width="150">
+                                        </a>
+                                        <br>
+                                        <a href="#">
+                                            <img src="images/logo_wa.png" alt="WhatsApp" width="150">
+                                        </a>
+                                    </div>
+
                                     <div class="product-meta">
                                         <span class="posted_in">Category: <a href="#" rel="tag">Dress</a>.</span> &nbsp;&nbsp;
                                         <span class="tagged_as">Tags: <a href="#" rel="tag">Batik</a>, <a href="#" rel="tag">Atasan</a>, <a href="#" rel="tag">Baju</a>, <a href="#" rel="tag">Printed</a>.</span>
