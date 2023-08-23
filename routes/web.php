@@ -22,4 +22,7 @@ Route::get('/detail', function () {
     return view('detail');
 });
 
-Route::get('/produk/{slug}', [BatikController::class, 'motif_jaran'])->name('batik.motif_jaran');
+Route::get('/produk/batik-motif-jaranan', [BatikController::class, 'motif_jaran'])->name('batik.motif_jaran');
+Route::get('/produk/pashmina-jati', [BatikController::class, 'motif_pashminajati'])->name('batik.motif_pashminajati');
+Route::get('/produk/batik-ecoprint-jati1', [BatikController::class, 'motif_ecoprintjati1'])->name('batik.motif_ecoprintjati1');
+Route::get('/produk/batik-ecoprint-jati2', [BatikController::class, 'motif_ecoprintjati2'])->name('batik.motif_ecoprintjati2');
