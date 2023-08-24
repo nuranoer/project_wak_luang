@@ -15,7 +15,7 @@ class BatikController extends BaseController
         $slug = 'batik-motif-jaranan';
         $produk = Produk::where('slug', $slug)->firstOrFail();
 
-        return view('motifjaran', [
+        return view('produk.motifjaran', [
             'produk' => $produk
         ]);
     }
@@ -24,7 +24,7 @@ class BatikController extends BaseController
         $slug = 'batik-motif-sulur-3-warna';
         $produk = Produk::where('slug', $slug)->firstOrFail();
 
-        return view('batikmotif3warna', [
+        return view('produk.batikmotif3warna', [
             'produk' => $produk
         ]);
     }
@@ -33,7 +33,7 @@ class BatikController extends BaseController
         $slug = 'batik-tulis-bunga-gepyok';
         $produk = Produk::where('slug', $slug)->firstOrFail();
 
-        return view('batikbungagepyok', [
+        return view('produk.batikbungagepyok', [
             'produk' => $produk
         ]);
     }
@@ -42,7 +42,7 @@ class BatikController extends BaseController
         $slug = 'batik-tulis-bunga-katun';
         $produk = Produk::where('slug', $slug)->firstOrFail();
 
-        return view('batiktulisbungakatun', [
+        return view('produk.batiktulisbungakatun', [
             'produk' => $produk
         ]);
     }
@@ -51,7 +51,7 @@ class BatikController extends BaseController
         $slug = 'batik-pashmina-ecoprint-maoni';
         $produk = Produk::where('slug', $slug)->firstOrFail();
 
-        return view('pashminamaoni', [
+        return view('produk.pashminamaoni', [
             'produk' => $produk
         ]);
     }
@@ -60,7 +60,7 @@ class BatikController extends BaseController
         $slug = 'batik-pashmina-ecoprint-secang';
         $produk = Produk::where('slug', $slug)->firstOrFail();
 
-        return view('pashminasecang', [
+        return view('produk.pashminasecang', [
             'produk' => $produk
         ]);
     }
@@ -69,7 +69,7 @@ class BatikController extends BaseController
         $slug = 'batik-pashmina-ecoprint-jati';
         $produk = Produk::where('slug', $slug)->firstOrFail();
 
-        return view('pashminajati', [
+        return view('produk.pashminajati', [
             'produk' => $produk
         ]);
     }
@@ -78,7 +78,7 @@ class BatikController extends BaseController
         $slug = 'batik-ecoprint-jati-1';
         $produk = Produk::where('slug', $slug)->firstOrFail();
 
-        return view('ecoprintjati1', [
+        return view('produk.ecoprintjati1', [
             'produk' => $produk
         ]);
     }
@@ -87,7 +87,7 @@ class BatikController extends BaseController
         $slug = 'batik-ecoprint-jati-2';
         $produk = Produk::where('slug', $slug)->firstOrFail();
 
-        return view('ecoprintjati2', [
+        return view('produk.ecoprintjati2', [
             'produk' => $produk
         ]);
     }
