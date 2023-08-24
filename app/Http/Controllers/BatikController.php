@@ -19,6 +19,51 @@ class BatikController extends BaseController
             'produk' => $produk
         ]);
     }
+    public function motif_3warna()
+    {
+        $slug = 'batik-motif-sulur-3-warna';
+        $produk = Produk::where('slug', $slug)->firstOrFail();
+
+        return view('batikmotif3warna', [
+            'produk' => $produk
+        ]);
+    }
+    public function motif_bungagepyok()
+    {
+        $slug = 'batik-tulis-bunga-gepyok';
+        $produk = Produk::where('slug', $slug)->firstOrFail();
+
+        return view('batikbungagepyok', [
+            'produk' => $produk
+        ]);
+    }
+    public function motif_katun()
+    {
+        $slug = 'batik-tulis-bunga-katun';
+        $produk = Produk::where('slug', $slug)->firstOrFail();
+
+        return view('batiktulisbungakatun', [
+            'produk' => $produk
+        ]);
+    }
+    public function pashmina_maoni()
+    {
+        $slug = 'batik-pashmina-ecoprint-maoni';
+        $produk = Produk::where('slug', $slug)->firstOrFail();
+
+        return view('pashminamaoni', [
+            'produk' => $produk
+        ]);
+    }
+    public function pashmina_secang()
+    {
+        $slug = 'batik-pashmina-ecoprint-secang';
+        $produk = Produk::where('slug', $slug)->firstOrFail();
+
+        return view('pashminasecang', [
+            'produk' => $produk
+        ]);
+    }
     public function motif_pashminajati()
     {
         $slug = 'batik-pashmina-ecoprint-jati';
