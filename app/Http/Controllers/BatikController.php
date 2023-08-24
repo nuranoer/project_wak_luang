@@ -10,6 +10,24 @@ use Illuminate\Routing\Controller as BaseController;
 
 class BatikController extends BaseController
 {
+    public function index()
+    {
+        $produk = Produk::all();
+
+        return view('index', [
+            'produk' => $produk
+        ]);
+    }
+
+    public function detail($slug)
+    {
+        $produk = Produk::where('slug', $slug)->firstOrFail();
+
+        return view('detail', [
+            'produk' => $produk
+        ]);
+    }
+
     public function motif_jaran()
     {
         $slug = 'batik-motif-jaranan';

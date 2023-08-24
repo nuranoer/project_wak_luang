@@ -19,9 +19,11 @@ use App\Http\Controllers\BatikController;
 // });
 
 // Route::get('/detail', function () {
-//     return view('detail');
-// });
-
+    //     return view('detail');
+    // });
+    
+Route::get('/', [BatikController::class, 'index'])->name('batik.index');
+Route::get('/{slug}', [BatikController::class, 'detail'])->name('batik.detail');
 Route::get('/produk/batik-motif-jaranan', [BatikController::class, 'motif_jaran'])->name('batik.motif_jaran');
 Route::get('/produk/batik-motif-3warna', [BatikController::class, 'motif_3warna'])->name('batik.motif_3warna');
 Route::get('/produk/batik-bunga-gepyok', [BatikController::class, 'motif_bungagepyok'])->name('batik.motif_bungagepyok');
