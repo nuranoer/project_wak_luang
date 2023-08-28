@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BatikController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,3 +34,8 @@ Route::get('/produk/pashmina-secang', [BatikController::class, 'pashmina_secang'
 Route::get('/produk/pashmina-jati', [BatikController::class, 'motif_pashminajati'])->name('batik.motif_pashminajati');
 Route::get('/produk/batik-ecoprint-jati1', [BatikController::class, 'motif_ecoprintjati1'])->name('batik.motif_ecoprintjati1');
 Route::get('/produk/batik-ecoprint-jati2', [BatikController::class, 'motif_ecoprintjati2'])->name('batik.motif_ecoprintjati2');
+
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+});
+Route::get('/admin/produk/index', [AdminController::class, 'index'])->name('admin.produk.index');
