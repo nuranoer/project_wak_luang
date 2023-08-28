@@ -34,7 +34,7 @@
                                 <div class="bootstrap-data-table-panel">
                                     <div class="table-responsive">
                                         <table id="bootstrap-data-table-export" class="table table-striped table-bordered" >
-                                        <a href="" class="btn btn-primary">Tambah Produk</a>
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambahModal">Tambah Produk</button>
                                             <thead>
                                                 <tr>
                                                     <th><center>No</center></th>
@@ -42,7 +42,6 @@
                                                     <th><center>Harga</center></th>
                                                     <th><center>Deskripsi</center></th>
                                                     <th><center>Kategori</center></th>
-                                                    <th><center>Gambar</center></th>
                                                     <th><center>Aksi</center></th>
                                                 </tr>
                                             </thead>
@@ -58,16 +57,82 @@
                                                     <td>{{ $p->deskripsi }}</td>
                                                     <td>{{ $p->kategori }}</td>
                                                     <td>
-                                                        <img src="{{ asset('images/produk/cut/' . $p->gambar) }}" alt="Gambar Produk" width="100">
-                                                    </td>
-                                                    <td>
-                                                        <a href="" class="btn btn-warning btn-sm">Edit</a>
-                                                        <a href="" class="btn btn-danger btn-sm">Hapus</a>
+                                                        <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#detailModal{{ $p->id }}"><i class="fa fa-eye"></i></button>
+                                                        <button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#editModal{{ $p->id }}"><i class="fa fa-edit"></i></button>
+                                                        <a href="" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#hapusModal{{ $p->id }}"><i class="fa fa-trash"></i></a>
                                                     </td>
                                                 </tr>
                                                 @endforeach
                                             </tbody>
                                         </table>
+
+                                        <!-- Modal untuk form tambah -->
+                                        <div class="modal fade" id="tambahModal" tabindex="-1" role="dialog" aria-labelledby="tambahModalLabel" aria-hidden="true" style="overflow: auto !important;">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="tambahModalLabel">Tambah Produk</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form id="formTambah"> <!-- ID formTambah untuk digunakan dalam Ajax -->
+                                                            <div class="form-group">
+                                                                <label for="nama_barang">Nama Barang</label>
+                                                                <input type="text" class="form-control" id="nama_barang" name="nama_barang" placeholder="Nama Barang">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="slug">Slug</label>
+                                                                <input type="text" class="form-control" id="slug" name="slug" placeholder="Slug">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="harga">Harga</label>
+                                                                <input type="text" class="form-control" id="harga" name="harga" placeholder="Harga">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="kategori">Kategori</label>
+                                                                <input type="text" class="form-control" id="kategori" name="kategori" placeholder="Kategori">
+                                                            </div>
+                                                            <!-- Tambahkan field lainnya sesuai kebutuhan -->
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                        <button type="button" class="btn btn-primary">Simpan</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Modal untuk form detail -->
+                                        @foreach($produk as $p)
+                                        <div class="modal fade" id="detailModal{{ $p->id }}" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="detailModalLabel">Detail Produk</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <!-- Isi dengan informasi detail produk -->
+                                                        <p>Nama Barang: <span id="detailNamaBarang"></span></p>
+                                                        <p>Harga: <span id="detailHarga"></span></p>
+                                                        <!-- Tambahkan field lainnya sesuai kebutuhan -->
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Modal untuk form edit -->
+                                        
+                                        <!-- Modal untuk hapus -->
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -99,4 +164,52 @@
     <script src="{{ asset('assetsadmin/js/lib/data-table/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('assetsadmin/js/lib/data-table/buttons.print.min.js') }}"></script>
     <script src="{{ asset('assetsadmin/js/lib/data-table/datatables-init.js') }}"></script>
+
+    <!-- Skrip untuk mengirim form menggunakan Ajax -->
+    <script>
+        $(document).ready(function() {
+            $('#tambahModal button.btn-primary').on('click', function() {
+                // Ambil data dari form dan kirim ke server menggunakan Ajax
+                $.ajax({
+                    url: '',
+                    type: 'POST',
+                    data: $('#formTambah').serialize(), // Gantikan 'formTambah' dengan ID form tambah
+                    success: function(response) {
+                        // Tanggapi respon sukses dari server
+                        alert('Produk berhasil ditambahkan!');
+                        $('#tambahModal').modal('hide'); // Tutup modal
+                    },
+                    error: function(response) {
+                        // Tanggapi respon gagal dari server
+                        alert('Terjadi kesalahan. Produk gagal ditambahkan.');
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#detailModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget); // Tombol yang ditekan
+                var productId = button.data('id'); // Mengambil data-id dari tombol
+
+                // Menggunakan AJAX untuk mengambil informasi produk dari server
+                $.ajax({
+                    url: '/get-product/' + productId, // Gantikan dengan URL yang sesuai
+                    type: 'GET',
+                    success: function(response) {
+                        // Mengisi modal dengan informasi produk yang diambil dari server
+                        $('#detailNamaBarang').text(response.nama_barang);
+                        $('#detailHarga').text(response.harga);
+                        // Mengisi field lainnya sesuai kebutuhan
+                    },
+                    error: function(response) {
+                        alert('Gagal mengambil informasi produk.');
+                    }
+                });
+            });
+        });
+    </script>
+
+
 @endsection

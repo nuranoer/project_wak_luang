@@ -32,6 +32,9 @@
     <link href="{{ asset('assetsadmin/css/lib/helper.css') }}" rel="stylesheet">
     <link href="{{ asset('assetsadmin/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('assetsadmin/css/lib/data-table/buttons.bootstrap.min.css') }}" rel="stylesheet" />
+
+
+    }
     
 </head>
 
