@@ -37,12 +37,12 @@
                                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambahModal">Tambah Produk</button>
                                             <thead>
                                                 <tr>
-                                                    <th><center>No</center></th>
-                                                    <th><center>Nama Barang</center></th>
-                                                    <th><center>Harga</center></th>
-                                                    <th><center>Deskripsi</center></th>
-                                                    <th><center>Kategori</center></th>
-                                                    <th><center>Aksi</center></th>
+                                                    <th class="text-center">No</th>
+                                                    <th class="text-center">Nama Barang</th>
+                                                    <th class="text-center">Harga</th>
+                                                    <th class="text-center">Deskripsi</th>
+                                                    <th class="text-center">Kategori</th>
+                                                    <th class="text-center">Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
