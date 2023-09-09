@@ -33,8 +33,6 @@
     <link href="{{ asset('assetsadmin/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('assetsadmin/css/lib/data-table/buttons.bootstrap.min.css') }}" rel="stylesheet" />
 
-
-    }
     
 </head>
 
@@ -212,10 +210,7 @@
                                     <i class="ti-angle-down f-s-10"></i>
                                 </span>
                                 <div class="drop-down dropdown-profile dropdown-menu dropdown-menu-right">
-                                    <div class="dropdown-content-heading">
-                                        <span class="text-left">Upgrade Now</span>
-                                        <p class="trial-day">30 Days Trail</p>
-                                    </div>
+                                   
                                     <div class="dropdown-content-body">
                                         <ul>
                                             <li>
@@ -225,7 +220,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="#">
+                                                <a href="{{ route('admin.logout') }}">
                                                     <i class="ti-power-off"></i>
                                                     <span>Logout</span>
                                                 </a>
