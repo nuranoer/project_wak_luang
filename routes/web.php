@@ -39,6 +39,7 @@ Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 });
 Route::get('/admin/produk/index', [AdminController::class, 'index'])->name('admin.produk.index');
+Route::get('/admin/hapus/{id}', [AdminController::class, 'hapus'])->name('admin.produk.hapus');
 Route::get('/admin/login', [AdminController::class, 'login_page'])->name('admin.login_page');
 Route::post('/login', [AdminController::class, 'login'])->name('admin.login');
 Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout');

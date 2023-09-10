@@ -59,7 +59,7 @@
                                                     <td>
                                                         <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#detailModal{{ $p->id }}"><i class="fa fa-eye"></i></button>
                                                         <button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#editModal{{ $p->id }}"><i class="fa fa-edit"></i></button>
-                                                        <a href="" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#hapusModal{{ $p->id }}"><i class="fa fa-trash"></i></a>
+                                                        <button type="button" class="btn btn-danger btn-xs hapus-button" data-item-id="{{ $p->id }}"><i class="fa fa-trash"></i></button>
                                                     </td>
                                                 </tr>
                                                 @endforeach
@@ -77,22 +77,75 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form id="formTambah"> <!-- ID formTambah untuk digunakan dalam Ajax -->
-                                                            <div class="form-group">
-                                                                <label for="nama_barang">Nama Barang</label>
-                                                                <input type="text" class="form-control" id="nama_barang" name="nama_barang" placeholder="Nama Barang">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="slug">Slug</label>
-                                                                <input type="text" class="form-control" id="slug" name="slug" placeholder="Slug">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="harga">Harga</label>
-                                                                <input type="text" class="form-control" id="harga" name="harga" placeholder="Harga">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="kategori">Kategori</label>
-                                                                <input type="text" class="form-control" id="kategori" name="kategori" placeholder="Kategori">
+                                                    <form id="formTambah" enctype="multipart/form-data"> <!-- ID formTambah untuk digunakan dalam Ajax -->
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label for="nama_barang">Nama Barang</label>
+                                                                        <input type="text" class="form-control @error('nama_barang') is-invalid @enderror" id="nama_barang" name="nama_barang" placeholder="Nama Barang">
+                                                                        @error('nama_barang')
+                                                                        <span class="invalid-feedback" role="alert">
+                                                                            <strong>{{ $message }}</strong>
+                                                                        </span>
+                                                                        @enderror
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="slug">Slug</label>
+                                                                        <input type="text" class="form-control @error('slug') is-invalid @enderror"" id="slug" name="slug" placeholder="Slug">
+                                                                        @error('slug')
+                                                                        <span class="invalid-feedback" role="alert">
+                                                                            <strong>{{ $message }}</strong>
+                                                                        </span>
+                                                                        @enderror
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="harga">Harga</label>
+                                                                        <div class="input-group">
+                                                                            <span class="input-group-addon">Rp.</span>
+                                                                            <input type="text" class="form-control @error('harga') is-invalid @enderror"" id="harga" name="harga" placeholder="Harga">
+                                                                        </div>
+                                                                        @error('harga')
+                                                                        <span class="invalid-feedback" role="alert">
+                                                                            <strong>{{ $message }}</strong>
+                                                                        </span>
+                                                                        @enderror
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label for="kategori">Kategori</label>
+                                                                        <input type="text" class="form-control @error('kategori') is-invalid @enderror"" id="kategori" name="kategori" placeholder="Kategori">
+                                                                        @error('kategori')
+                                                                        <span class="invalid-feedback" role="alert">
+                                                                            <strong>{{ $message }}</strong>
+                                                                        </span>
+                                                                        @enderror
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="tag">Tag</label>
+                                                                        <input type="text" class="form-control" id="tag" name="tag" placeholder="Tag">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="deskripsi">Deskripsi</label>
+                                                                        <textarea class="form-control @error('deskripsi') is-invalid @enderror"" id="deskripsi" name="deskripsi" rows="3"></textarea>
+                                                                        @error('deskripsi')
+                                                                        <span class="invalid-feedback" role="alert">
+                                                                            <strong>{{ $message }}</strong>
+                                                                        </span>
+                                                                        @enderror
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="gambar">Gambar</label>
+                                                                        <input type="file" class="form-control @error('gambar') is-invalid @enderror"" id="gambar" name="gambar">
+                                                                        @error('gambar')
+                                                                        <span class="invalid-feedback" role="alert">
+                                                                            <strong>{{ $message }}</strong>
+                                                                        </span>
+                                                                        @enderror
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                             <!-- Tambahkan field lainnya sesuai kebutuhan -->
                                                         </form>
@@ -118,8 +171,13 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <!-- Isi dengan informasi detail produk -->
-                                                        <p>Nama Barang: <span id="detailNamaBarang"></span></p>
-                                                        <p>Harga: <span id="detailHarga"></span></p>
+                                                        <p>Nama Produk: {{ $p->nama_barang }} <span id="detailNamaBarang"></span></p>
+                                                        <p>Harga: {{ $p->harga }} <span id="detailHarga"></span></p>
+                                                        <p>Kategori: {{ $p->kategori }} <span id="detailKategori"></span></p>
+                                                        <p>Deskripsi: {{ $p->deskripsi }} <span id="detailDeskripsi"></span></p>
+                                                        <img src="{{ asset('images/produk/cut/' . $p->gambar) }}" alt="Gambar Produk" width="200">
+
+
                                                         <!-- Tambahkan field lainnya sesuai kebutuhan -->
                                                     </div>
                                                     <div class="modal-footer">
@@ -130,6 +188,71 @@
                                         </div>
 
                                         <!-- Modal untuk form edit -->
+                                        <div class="modal fade" id="editModal{{ $p->id }}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true" style="overflow: auto !important;">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="editModalLabel">Edit Produk</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form id="formEdit" enctype="multipart/form-data"> 
+                                                            <input type="hidden" name="id" id="id">
+                                                             <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label for="nama_barang">Nama Barang</label>
+                                                                        <input type="text" class="form-control" id="nama_barang" name="nama_barang" value="{{ $p->nama_barang }}">
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="slug">Slug</label>
+                                                                        <input type="text" class="form-control" id="slug" name="slug" value="{{ $p->slug }}">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="harga">Harga</label>
+                                                                        <div class="input-group">
+                                                                            <span class="input-group-addon">Rp.</span>
+                                                                            <input type="text" class="form-control" id="harga" name="harga" value="{{ $p->harga }}">
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label for="kategori">Kategori</label>
+                                                                        <input type="text" class="form-control" id="kategori" name="kategori" value="{{ $p->kategori }}">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="tag">Tag</label>
+                                                                        <input type="text" class="form-control" id="tag" name="tag" value="{{ $p->tag }}">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="deskripsi">Deskripsi</label>
+                                                                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3" value="{{ $p->deskripsi }}"></textarea>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="gambar">Gambar</label>
+                                                                        <img id="gambar-preview" src="" alt="Preview Gambar" style="max-width: 100px;">
+                                                                        <input type="file" class="form-control" id="gambar" name="gambar">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- Tambahkan field lainnya sesuai kebutuhan -->
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                        <button type="button" class="btn btn-primary">Simpan</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
                                         
                                         <!-- Modal untuk hapus -->
                                         @endforeach
@@ -150,7 +273,8 @@
     <script src="{{ asset('assetsadmin/js/lib/menubar/sidebar.js') }}"></script>
     <script src="{{ asset('assetsadmin/js/lib/preloader/pace.min.js') }}"></script>
     <!-- sidebar -->
-    
+    <script src="{{ asset('assetsadmin/js/lib/sweetalert/sweetalert.min.js') }}"></script>
+    <script src="{{ asset('assetsadmin/js/lib/sweetalert/sweetalert.init.js') }}"></script>
     <!-- bootstrap -->
 
     <script src="{{ asset('assetsadmin/js/lib/bootstrap.min.js') }}"></script><script src="{{ asset('assetsadmin/js/scripts.js') }}"></script>
@@ -165,28 +289,67 @@
     <script src="{{ asset('assetsadmin/js/lib/data-table/buttons.print.min.js') }}"></script>
     <script src="{{ asset('assetsadmin/js/lib/data-table/datatables-init.js') }}"></script>
 
-    <!-- Skrip untuk mengirim form menggunakan Ajax -->
     <script>
-        $(document).ready(function() {
-            $('#tambahModal button.btn-primary').on('click', function() {
-                // Ambil data dari form dan kirim ke server menggunakan Ajax
-                $.ajax({
-                    url: '',
-                    type: 'POST',
-                    data: $('#formTambah').serialize(), // Gantikan 'formTambah' dengan ID form tambah
-                    success: function(response) {
-                        // Tanggapi respon sukses dari server
-                        alert('Produk berhasil ditambahkan!');
-                        $('#tambahModal').modal('hide'); // Tutup modal
-                    },
-                    error: function(response) {
-                        // Tanggapi respon gagal dari server
-                        alert('Terjadi kesalahan. Produk gagal ditambahkan.');
-                    }
-                });
+    $(document).ready(function() {
+        $('#tambahModal button.btn-primary').on('click', function() {
+            // Ambil data dari form dan kirim ke server menggunakan Ajax
+            $.ajax({
+                url: '', // Ganti dengan URL untuk mengirim data form
+                type: 'POST',
+                data: $('#formTambah').serialize(), // Gantikan 'formTambah' dengan ID form tambah
+                success: function(response) {
+                    // Tanggapi respon sukses dari server
+                    swal("Success!", "Produk berhasil ditambahkan!", "success");
+                    $('#tambahModal').modal('hide'); // Tutup modal
+                },
+                error: function(response) {
+                    // Tanggapi respon gagal dari server
+                    swal("Error!", "Terjadi kesalahan. Produk gagal ditambahkan.", "error");
+                }
             });
         });
+    });
     </script>
+    <script>
+    $(document).ready(function() {
+        $('#editModal button#edit_button').on('click', function() {
+            // Ambil data dari form edit dan kirim ke server menggunakan Ajax
+            var id = $(this).data('id');
+            var nama_barang = $(this).data('nama-barang');
+            var slug = $(this).data('slug');
+            var harga = $(this).data('harga');
+            var kategori = $(this).data('kategori');
+            var tag = $(this).data('tag');
+            var deskripsi = $(this).data('deskripsi');
+            var gambarUrl = $(this).data('gambar');
+
+            $('#id').val(id);
+            $('#nama_barang').val(nama_barang);
+            $('#slug').val(slug);
+            $('#harga').val(harga);
+            $('#kategori').val(kategori);
+            $('#tag').val(tag);
+            $('#deskripsi').val(deskripsi);
+            $('#gambar-preview').attr('src', gambarUrl);
+            
+            $.ajax({
+                url: '', // Ganti dengan URL untuk mengirim data form edit
+                type: 'POST', // Gantikan 'POST' dengan metode HTTP yang sesuai
+                data: $('#formEdit').serialize(), // Gantikan 'formEdit' dengan ID form edit
+                success: function(response) {
+                    // Tanggapi respon sukses dari server
+                    swal("Success!", "Produk berhasil diedit!", "success");
+                    $('#editModal').modal('hide'); // Tutup modal
+                },
+                error: function(response) {
+                    // Tanggapi respon gagal dari server
+                    swal("Error!", "Terjadi kesalahan. Produk gagal diedit.", "error");
+                }
+            });
+        });
+    });
+    </script>
+
     <script>
         $(document).ready(function() {
             $('#detailModal').on('show.bs.modal', function(event) {
@@ -201,7 +364,9 @@
                         // Mengisi modal dengan informasi produk yang diambil dari server
                         $('#detailNamaBarang').text(response.nama_barang);
                         $('#detailHarga').text(response.harga);
-                        // Mengisi field lainnya sesuai kebutuhan
+                        $('#detailKategori').text(response.kategori);
+                        $('#detailDeskripsi').text(response.deskripsi);
+                        $('#detailGambar').attr('src', response.gambar);
                     },
                     error: function(response) {
                         alert('Gagal mengambil informasi produk.');
@@ -210,6 +375,46 @@
             });
         });
     </script>
+
+    <script>
+        $(document).ready(function() {
+            $('.hapus-button').on('click', function() {
+                var itemId = $(this).data('item-id');
+
+                // Tampilkan SweetAlert konfirmasi hapus
+                Swal.fire({
+                    title: 'Konfirmasi Hapus',
+                    text: "Apakah Anda yakin ingin menghapus item ini?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Jika pengguna menekan "Ya, Hapus!", lakukan aksi penghapusan di sini
+                        $.ajax({
+                            url: '/admin/hapus/' + itemId,
+                            type: 'DELETE',
+                            success: function(response) {
+                                // Handle sukses menghapus item
+                                // Tampilkan SweetAlert sukses
+                                Swal.fire('Sukses!', 'Item berhasil dihapus.', 'success');
+                                // Refresh atau perbarui tampilan item setelah menghapus jika perlu
+                            },
+                            error: function(response) {
+                                // Tanggapi kesalahan saat menghapus item
+                                // Tampilkan SweetAlert error
+                                Swal.fire('Error!', 'Terjadi kesalahan. Item gagal dihapus.', 'error');
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
 
 
 @endsection
