@@ -59,7 +59,7 @@
                                                     <td>
                                                         <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#detailModal{{ $p->id }}"><i class="fa fa-eye"></i></button>
                                                         <button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#editModal{{ $p->id }}"><i class="fa fa-edit"></i></button>
-                                                        <button type="button" class="btn btn-danger btn-xs hapus-button" data-item-id="{{ $p->id }}"><i class="fa fa-trash"></i></button>
+                                                        <button type="button" class="btn btn-danger btn-xs" onclick="confirmDelete('{{ $p->id }}')"><i class="fa fa-trash"></i></button>
                                                     </td>
                                                 </tr>
                                                 @endforeach
@@ -255,6 +255,38 @@
 
                                         
                                         <!-- Modal untuk hapus -->
+
+                                        <div class="modal fade text-left" id="deleteModal{{ $p->id }}" tabindex="-1" role="dialog"
+                                            aria-labelledby="myModalLabel120" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+                                                role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header bg-danger">
+                                                        <h5 class="modal-title white" id="myModalLabel120">PERHATIAN!
+                                                        </h5>
+                                                        <button type="button" class="close" data-bs-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <i data-feather="x"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                    <b>Apakah anda yakin menghapus data ini? <br>
+                                                    Data yang sudah dihapus tidak dapat dikembalikan.</b>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-light-secondary"
+                                                            data-bs-dismiss="modal">
+                                                            <i class="bx bx-x d-block d-sm-none"></i>
+                                                            <span class="d-none d-sm-block">Cancel</span>
+                                                        </button>
+                                                        <a href="" type="button" class="btn btn-danger ml-1">
+                                                            <i class="bx bx-check d-block d-sm-none"></i>
+                                                            <span class="d-none d-sm-block">Delete it!</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         @endforeach
                                     </div>
                                 </div>
@@ -377,42 +409,41 @@
     </script>
 
     <script>
-        $(document).ready(function() {
-            $('.hapus-button').on('click', function() {
-                var itemId = $(this).data('item-id');
-
-                // Tampilkan SweetAlert konfirmasi hapus
-                Swal.fire({
-                    title: 'Konfirmasi Hapus',
-                    text: "Apakah Anda yakin ingin menghapus item ini?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Ya, Hapus!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Jika pengguna menekan "Ya, Hapus!", lakukan aksi penghapusan di sini
-                        $.ajax({
-                            url: '/admin/hapus/' + itemId,
-                            type: 'DELETE',
-                            success: function(response) {
-                                // Handle sukses menghapus item
-                                // Tampilkan SweetAlert sukses
-                                Swal.fire('Sukses!', 'Item berhasil dihapus.', 'success');
-                                // Refresh atau perbarui tampilan item setelah menghapus jika perlu
-                            },
-                            error: function(response) {
-                                // Tanggapi kesalahan saat menghapus item
-                                // Tampilkan SweetAlert error
-                                Swal.fire('Error!', 'Terjadi kesalahan. Item gagal dihapus.', 'error');
-                            }
-                        });
+    function confirmDelete(id) {
+        // Tampilkan SweetAlert konfirmasi hapus
+        Swal.fire({
+            title: 'Konfirmasi Hapus',
+            text: 'Apakah Anda yakin ingin menghapus item ini?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Jika pengguna menekan "Ya, Hapus!", lakukan aksi penghapusan di sini
+                $.ajax({
+                    url: '/admin/produk/hapus/' + id, // Sesuaikan dengan URL Anda
+                    type: 'DELETE', // Gunakan metode DELETE
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        // Tanggapi respon sukses dari server
+                        Swal.fire('Sukses', 'Item berhasil dihapus!', 'success');
+                        // Selanjutnya, lakukan hal yang sesuai seperti menghapus baris dari tabel HTML
+                    },
+                    error: function(response) {
+                        // Tanggapi respon gagal dari server
+                        Swal.fire('Error', 'Terjadi kesalahan saat menghapus item.', 'error');
                     }
                 });
-            });
+            }
         });
+    }
+
+
     </script>
 
 

@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Produk;
+use App\Models\User;
 // use GuzzleHttp\Psr7\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -99,6 +100,44 @@ class AdminController extends BaseController
         return redirect()->back()->with('success', 'Produk berhasil ditambahkan');
     }
 
+    public function edit(Request $request)
+    {
+        $id = $request->input('id');
+        $nama_barang = $request->input('nama_barang');
+        $slug = $request->input('slug');
+        $harga = $request->input('harga');
+        $kategori = $request->input('kategori');
+        $tag = $request->input('tag');
+        $deskripsi = $request->input('deskripsi');
+        $gambar = $request->file('gambar');
+    
+        if ($gambar) {
+            // Simpan gambar baru dengan nama yang unik
+            $nama_gambar = uniqid() . '.' . $gambar->getClientOriginalExtension();
+            $lokasi_gambar = public_path('images/produk/' . $nama_gambar);
+
+            // Proses gambar menggunakan Intervention Image
+            Image::make($gambar)->resize(300, 200)->save($lokasi_gambar);
+
+            // Perbarui kolom gambar di database
+            Produk::where('id', $id)->update(['gambar' => $nama_gambar]);
+        }
+        
+        // Lakukan pembaruan data produk berdasarkan ID
+        Produk::where('id', $id)->update([
+            'nama_barang' => $nama_barang,
+            'slug' => $slug,
+            'harga' => $harga,
+            'kategori' => $kategori,
+            'tag' => $tag,
+            'deskripsi' => $deskripsi,
+            // Tambahkan pembaruan data gambar produk jika diperlukan
+        ]);
+
+        // Tanggapi sukses jika berhasil memperbarui data produk
+        return response()->json(['message' => 'Produk berhasil diperbarui']);
+    }
+
 
     public function hapus($id)
     {
@@ -106,13 +145,13 @@ class AdminController extends BaseController
             // Gantilah 'Item' dengan model yang sesuai
             $produk = Produk::findOrFail($id);
             $produk->delete();
-
-            return response()->json(['message' => 'Item berhasil dihapus'], 200);
+    
+            return redirect()->back()->with('success', 'Item berhasil dihapus');
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Terjadi kesalahan saat menghapus item'], 500);
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus item');
         }
     }
-
+    
 }
 
 ?>
