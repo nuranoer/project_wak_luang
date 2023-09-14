@@ -59,7 +59,8 @@
                                                     <td>
                                                         <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#detailModal{{ $p->id }}"><i class="fa fa-eye"></i></button>
                                                         <button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#editModal{{ $p->id }}"><i class="fa fa-edit"></i></button>
-                                                        <button type="button" class="btn btn-danger btn-xs" onclick="confirmDelete('{{ $p->id }}')"><i class="fa fa-trash"></i></button>
+                                                        <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal{{ $p->id }}"><i class="fa fa-trash"></i></button>
+                                                        <!-- <button type="button" class="btn btn-danger btn-xs" onclick="confirmDelete('{{ $p->id }}')"><i class="fa fa-trash"></i></button> -->
                                                     </td>
                                                 </tr>
                                                 @endforeach
@@ -76,8 +77,10 @@
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
-                                                    <div class="modal-body">
-                                                    <form id="formTambah" enctype="multipart/form-data"> <!-- ID formTambah untuk digunakan dalam Ajax -->
+                                                    <form id="formTambah" enctype="multipart/form-data" action="/admin/produk/simpan" method="post">
+                                                    <!-- ID formTambah untuk digunakan dalam Ajax -->
+                                                        @csrf
+                                                        <div class="modal-body">
                                                             <div class="row">
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
@@ -90,7 +93,7 @@
                                                                         @enderror
                                                                     </div>
 
-                                                                    <div class="form-group">
+                                                                    <!-- <div class="form-group">
                                                                         <label for="slug">Slug</label>
                                                                         <input type="text" class="form-control @error('slug') is-invalid @enderror"" id="slug" name="slug" placeholder="Slug">
                                                                         @error('slug')
@@ -98,12 +101,13 @@
                                                                             <strong>{{ $message }}</strong>
                                                                         </span>
                                                                         @enderror
-                                                                    </div>
+                                                                    </div> -->
+
                                                                     <div class="form-group">
                                                                         <label for="harga">Harga</label>
                                                                         <div class="input-group">
                                                                             <span class="input-group-addon">Rp.</span>
-                                                                            <input type="text" class="form-control @error('harga') is-invalid @enderror"" id="harga" name="harga" placeholder="Harga">
+                                                                            <input type="number" class="form-control @error('harga') is-invalid @enderror"" id="harga" name="harga" placeholder="Harga">
                                                                         </div>
                                                                         @error('harga')
                                                                         <span class="invalid-feedback" role="alert">
@@ -112,24 +116,24 @@
                                                                         @enderror
                                                                     </div>
 
-                                                                </div>
-                                                                <div class="col-md-6">
                                                                     <div class="form-group">
                                                                         <label for="kategori">Kategori</label>
-                                                                        <input type="text" class="form-control @error('kategori') is-invalid @enderror"" id="kategori" name="kategori" placeholder="Kategori">
+                                                                        <input type="text" class="form-control @error('kategori') is-invalid @enderror" id="kategori" name="kategori" placeholder="Kategori">
                                                                         @error('kategori')
                                                                         <span class="invalid-feedback" role="alert">
                                                                             <strong>{{ $message }}</strong>
                                                                         </span>
                                                                         @enderror
                                                                     </div>
+                                                                </div>
+                                                                <div class="col-md-6">
                                                                     <div class="form-group">
                                                                         <label for="tag">Tag</label>
                                                                         <input type="text" class="form-control" id="tag" name="tag" placeholder="Tag">
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="deskripsi">Deskripsi</label>
-                                                                        <textarea class="form-control @error('deskripsi') is-invalid @enderror"" id="deskripsi" name="deskripsi" rows="3"></textarea>
+                                                                        <textarea class="form-control @error('deskripsi') is-invalid @enderror" id="deskripsi" name="deskripsi" rows="3"></textarea>
                                                                         @error('deskripsi')
                                                                         <span class="invalid-feedback" role="alert">
                                                                             <strong>{{ $message }}</strong>
@@ -138,7 +142,7 @@
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="gambar">Gambar</label>
-                                                                        <input type="file" class="form-control @error('gambar') is-invalid @enderror"" id="gambar" name="gambar">
+                                                                        <input type="file" class="form-control @error('gambar') is-invalid @enderror" id="gambar" name="gambar">
                                                                         @error('gambar')
                                                                         <span class="invalid-feedback" role="alert">
                                                                             <strong>{{ $message }}</strong>
@@ -148,12 +152,12 @@
                                                                 </div>
                                                             </div>
                                                             <!-- Tambahkan field lainnya sesuai kebutuhan -->
-                                                        </form>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                                        <button type="button" class="btn btn-primary">Simpan</button>
-                                                    </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                            <button type="submit" class="btn btn-primary">Simpan</button>
+                                                        </div>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
@@ -171,13 +175,15 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <!-- Isi dengan informasi detail produk -->
-                                                        <p>Nama Produk: {{ $p->nama_barang }} <span id="detailNamaBarang"></span></p>
-                                                        <p>Harga: {{ $p->harga }} <span id="detailHarga"></span></p>
-                                                        <p>Kategori: {{ $p->kategori }} <span id="detailKategori"></span></p>
-                                                        <p>Deskripsi: {{ $p->deskripsi }} <span id="detailDeskripsi"></span></p>
-                                                        <img src="{{ asset('images/produk/cut/' . $p->gambar) }}" alt="Gambar Produk" width="200">
-
-
+                                                        <h6>Nama Barang</h6>
+                                                        <p>{{ $p->nama_barang }} <span id="detailNamaBarang"></span></p>
+                                                        <h6>Harga</h6>
+                                                        <p>{{ $p->harga }} <span id="detailHarga"></span></p>
+                                                        <h6>Kategori</h6>
+                                                        <p>{{ $p->kategori }} <span id="detailKategori"></span></p>
+                                                        <h6>Deskripsi</h6>
+                                                        <p>{{ $p->deskripsi }} <span id="detailDeskripsi"></span></p>
+                                                        <img src="{{ asset('images/produk/' . $p->gambar) }}" alt="Gambar Produk" width="200">
                                                         <!-- Tambahkan field lainnya sesuai kebutuhan -->
                                                     </div>
                                                     <div class="modal-footer">
@@ -197,8 +203,9 @@
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
-                                                    <div class="modal-body">
-                                                        <form id="formEdit" enctype="multipart/form-data"> 
+                                                    <form id="formEdit" enctype="multipart/form-data" method="post" action="/admin/produk/edit/{{ $p->id }}"> 
+                                                        @csrf
+                                                        <div class="modal-body">
                                                             <input type="hidden" name="id" id="id">
                                                              <div class="row">
                                                                 <div class="col-md-6">
@@ -207,10 +214,10 @@
                                                                         <input type="text" class="form-control" id="nama_barang" name="nama_barang" value="{{ $p->nama_barang }}">
                                                                     </div>
 
-                                                                    <div class="form-group">
+                                                                    <!-- <div class="form-group">
                                                                         <label for="slug">Slug</label>
                                                                         <input type="text" class="form-control" id="slug" name="slug" value="{{ $p->slug }}">
-                                                                    </div>
+                                                                    </div> -->
                                                                     <div class="form-group">
                                                                         <label for="harga">Harga</label>
                                                                         <div class="input-group">
@@ -218,40 +225,38 @@
                                                                             <input type="text" class="form-control" id="harga" name="harga" value="{{ $p->harga }}">
                                                                         </div>
                                                                     </div>
-
-                                                                </div>
-                                                                <div class="col-md-6">
                                                                     <div class="form-group">
                                                                         <label for="kategori">Kategori</label>
                                                                         <input type="text" class="form-control" id="kategori" name="kategori" value="{{ $p->kategori }}">
                                                                     </div>
+
+                                                                </div>
+                                                                <div class="col-md-6">
                                                                     <div class="form-group">
                                                                         <label for="tag">Tag</label>
                                                                         <input type="text" class="form-control" id="tag" name="tag" value="{{ $p->tag }}">
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="deskripsi">Deskripsi</label>
-                                                                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3" value="{{ $p->deskripsi }}"></textarea>
+                                                                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3">{{ $p->deskripsi }}</textarea>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="gambar">Gambar</label>
-                                                                        <img id="gambar-preview" src="" alt="Preview Gambar" style="max-width: 100px;">
+                                                                        <img id="gambar-preview" src="{{ asset('images/produk/' . $p->gambar) }}" alt="Preview Gambar" style="max-width: 100px;">
                                                                         <input type="file" class="form-control" id="gambar" name="gambar">
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <!-- Tambahkan field lainnya sesuai kebutuhan -->
-                                                        </form>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                                        <button type="button" class="btn btn-primary">Simpan</button>
-                                                    </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                            <button type="submit" class="btn btn-primary">Simpan</button>
+                                                        </div>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
-
-
 
                                         
                                         <!-- Modal untuk hapus -->
@@ -262,7 +267,7 @@
                                                 role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header bg-danger">
-                                                        <h5 class="modal-title white" id="myModalLabel120">PERHATIAN!
+                                                        <h5 class="modal-title text-white" id="myModalLabel120">PERHATIAN!
                                                         </h5>
                                                         <button type="button" class="close" data-bs-dismiss="modal"
                                                             aria-label="Close">
@@ -270,16 +275,12 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                    <b>Apakah anda yakin menghapus data ini? <br>
-                                                    Data yang sudah dihapus tidak dapat dikembalikan.</b>
+                                                    <h6><b>Apakah anda yakin menghapus data <span class="text-danger">"{{ $p->nama_barang }}"</span>? <br>
+                                                    Data yang sudah dihapus tidak dapat dikembalikan.</b></h6>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-light-secondary"
-                                                            data-bs-dismiss="modal">
-                                                            <i class="bx bx-x d-block d-sm-none"></i>
-                                                            <span class="d-none d-sm-block">Cancel</span>
-                                                        </button>
-                                                        <a href="" type="button" class="btn btn-danger ml-1">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                        <a href="/admin/produk/hapus/{{ $p->id }}" class="btn btn-danger ml-1">
                                                             <i class="bx bx-check d-block d-sm-none"></i>
                                                             <span class="d-none d-sm-block">Delete it!</span>
                                                         </a>
@@ -309,7 +310,8 @@
     <script src="{{ asset('assetsadmin/js/lib/sweetalert/sweetalert.init.js') }}"></script>
     <!-- bootstrap -->
 
-    <script src="{{ asset('assetsadmin/js/lib/bootstrap.min.js') }}"></script><script src="{{ asset('assetsadmin/js/scripts.js') }}"></script>
+    <script src="{{ asset('assetsadmin/js/lib/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assetsadmin/js/scripts.js') }}"></script>
     <!-- scripit init-->
     <script src="{{ asset('assetsadmin/js/lib/data-table/datatables.min.js') }}"></script>
     <script src="{{ asset('assetsadmin/js/lib/data-table/dataTables.buttons.min.js') }}"></script>
@@ -326,7 +328,7 @@
         $('#tambahModal button.btn-primary').on('click', function() {
             // Ambil data dari form dan kirim ke server menggunakan Ajax
             $.ajax({
-                url: '', // Ganti dengan URL untuk mengirim data form
+                url: '/admin/produk/simpan', // Ganti dengan URL untuk mengirim data form
                 type: 'POST',
                 data: $('#formTambah').serialize(), // Gantikan 'formTambah' dengan ID form tambah
                 success: function(response) {
@@ -342,6 +344,7 @@
         });
     });
     </script>
+
     <script>
     $(document).ready(function() {
         $('#editModal button#edit_button').on('click', function() {
