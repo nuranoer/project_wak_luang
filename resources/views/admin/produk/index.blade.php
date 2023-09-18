@@ -85,12 +85,7 @@
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
                                                                         <label for="nama_barang">Nama Barang</label>
-                                                                        <input type="text" class="form-control @error('nama_barang') is-invalid @enderror" id="nama_barang" name="nama_barang" placeholder="Nama Barang">
-                                                                        @error('nama_barang')
-                                                                        <span class="invalid-feedback" role="alert">
-                                                                            <strong>{{ $message }}</strong>
-                                                                        </span>
-                                                                        @enderror
+                                                                        <input type="text" class="form-control" id="nama_barang" name="nama_barang" placeholder="Nama Barang">
                                                                     </div>
 
                                                                     <!-- <div class="form-group">
@@ -107,23 +102,13 @@
                                                                         <label for="harga">Harga</label>
                                                                         <div class="input-group">
                                                                             <span class="input-group-addon">Rp.</span>
-                                                                            <input type="number" class="form-control @error('harga') is-invalid @enderror"" id="harga" name="harga" placeholder="Harga">
+                                                                            <input type="number" class="form-control" id="harga" name="harga" placeholder="Harga">
                                                                         </div>
-                                                                        @error('harga')
-                                                                        <span class="invalid-feedback" role="alert">
-                                                                            <strong>{{ $message }}</strong>
-                                                                        </span>
-                                                                        @enderror
                                                                     </div>
 
                                                                     <div class="form-group">
                                                                         <label for="kategori">Kategori</label>
-                                                                        <input type="text" class="form-control @error('kategori') is-invalid @enderror" id="kategori" name="kategori" placeholder="Kategori">
-                                                                        @error('kategori')
-                                                                        <span class="invalid-feedback" role="alert">
-                                                                            <strong>{{ $message }}</strong>
-                                                                        </span>
-                                                                        @enderror
+                                                                        <input type="text" class="form-control" id="kategori" name="kategori" placeholder="Kategori">
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-6">
@@ -133,21 +118,11 @@
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="deskripsi">Deskripsi</label>
-                                                                        <textarea class="form-control @error('deskripsi') is-invalid @enderror" id="deskripsi" name="deskripsi" rows="3"></textarea>
-                                                                        @error('deskripsi')
-                                                                        <span class="invalid-feedback" role="alert">
-                                                                            <strong>{{ $message }}</strong>
-                                                                        </span>
-                                                                        @enderror
+                                                                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3"></textarea>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="gambar">Gambar</label>
-                                                                        <input type="file" class="form-control @error('gambar') is-invalid @enderror" id="gambar" name="gambar">
-                                                                        @error('gambar')
-                                                                        <span class="invalid-feedback" role="alert">
-                                                                            <strong>{{ $message }}</strong>
-                                                                        </span>
-                                                                        @enderror
+                                                                        <input type="file" class="form-control" id="gambar" name="gambar">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -315,10 +290,7 @@
     <!-- scripit init-->
     <script src="{{ asset('assetsadmin/js/lib/data-table/datatables.min.js') }}"></script>
     <script src="{{ asset('assetsadmin/js/lib/data-table/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('assetsadmin/js/lib/data-table/buttons.flash.min.js') }}"></script>
-    <script src="{{ asset('assetsadmin/js/lib/data-table/jszip.min.js') }}"></script>
     <script src="{{ asset('assetsadmin/js/lib/data-table/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('assetsadmin/js/lib/data-table/vfs_fonts.js') }}"></script>
     <script src="{{ asset('assetsadmin/js/lib/data-table/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('assetsadmin/js/lib/data-table/buttons.print.min.js') }}"></script>
     <script src="{{ asset('assetsadmin/js/lib/data-table/datatables-init.js') }}"></script>
@@ -331,15 +303,6 @@
                 url: '/admin/produk/simpan', // Ganti dengan URL untuk mengirim data form
                 type: 'POST',
                 data: $('#formTambah').serialize(), // Gantikan 'formTambah' dengan ID form tambah
-                success: function(response) {
-                    // Tanggapi respon sukses dari server
-                    swal("Success!", "Produk berhasil ditambahkan!", "success");
-                    $('#tambahModal').modal('hide'); // Tutup modal
-                },
-                error: function(response) {
-                    // Tanggapi respon gagal dari server
-                    swal("Error!", "Terjadi kesalahan. Produk gagal ditambahkan.", "error");
-                }
             });
         });
     });

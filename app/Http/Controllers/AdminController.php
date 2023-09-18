@@ -10,6 +10,10 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\File;
+
+
 
 class AdminController extends BaseController
 {
@@ -67,22 +71,16 @@ class AdminController extends BaseController
 
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'nama_barang' => 'required|string|max:255',
-        //     'slug' => 'required|string|max:255|unique:produk',
-        //     'harga' => 'required|numeric',
-        //     'kategori' => 'required|string|max:255',
-        //     'tag' => 'nullable|string',
-        //     'deskripsi' => 'required|string',
-        //     'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // sesuaikan dengan jenis gambar yang diperbolehkan
-        // ]);
-
         // // Upload gambar
         if ($request->hasFile('gambar')) {
             $gambar = $request->file('gambar');
             $gambarName = time() . '.' . $gambar->getClientOriginalExtension();
             $gambar->move(public_path('images/produk'), $gambarName);
-            // $produk->gambar = $gambarName;
+
+            // Salin gambar ke folder kedua (images/produk/cut)
+            $destinationPath = public_path('images/produk/cut');
+            File::copy(public_path('images/produk') . '/' . $gambarName, $destinationPath . '/' . $gambarName);
+
         }
 
         // Code untuk menyimpan data ke database
@@ -94,7 +92,7 @@ class AdminController extends BaseController
         $produk->tag = $request->tag;
         $produk->deskripsi = $request->deskripsi;
         $produk->gambar = $gambarName;
-
+        
         $produk->save();
         return redirect()->back()->with('success', 'Produk berhasil ditambahkan');
     }
@@ -112,14 +110,39 @@ class AdminController extends BaseController
         $deskripsi = $request->input('deskripsi');
         $gambar = $request->file('gambar');
 
-        if ($request->hasFile('image')) {
+        if ($request->hasFile('gambar')) {
 
-            //upload new image
+            // Upload gambar baru
             $nama_gambar = uniqid() . '.' . $gambar->getClientOriginalExtension();
             $lokasi_gambar = public_path('images/produk/' . $nama_gambar);
-            Produk::make($gambar)->resize(300, 200)->save($lokasi_gambar);
+            $gambar->move(public_path('images/produk'), $nama_gambar);
 
-            Produk::delete('images/produk/'.$produk->image);
+            // Salin gambar ke folder kedua (images/produk/cut)
+            $destinationPath = public_path('images/produk/cut');
+            File::copy(public_path('images/produk') . '/' . $nama_gambar, $destinationPath . '/' . $nama_gambar);
+
+
+            // Resize gambar
+            $image = Image::make($lokasi_gambar);
+            $image->resize(300, 200); // Ganti ukuran sesuai yang Anda inginkan
+            $image->save($lokasi_gambar);
+
+
+            // Hapus gambar lama jika ada
+            if ($produk->gambar) {
+                $path_gambar_lama = public_path('images/produk/' . $produk->gambar);
+                if (file_exists($path_gambar_lama)) {
+                    unlink($path_gambar_lama); // Menghapus gambar lama
+                }
+            }
+
+            // Hapus gambar lama di folder images/produk/cut jika ada
+            if ($produk->gambar) {
+                $path_gambar_lama_cut = public_path('images/produk/cut/' . $produk->gambar);
+                if (file_exists($path_gambar_lama_cut)) {
+                    unlink($path_gambar_lama_cut); // Menghapus gambar lama di folder images/produk/cut
+                }
+            }
 
             $produk->update([
                 'nama_barang' => $nama_barang,
@@ -143,29 +166,6 @@ class AdminController extends BaseController
                 // Tambahkan pembaruan data gambar produk jika diperlukan
             ]);
         }
-    
-        // if ($gambar) {
-        //     // Simpan gambar baru dengan nama yang unik
-        //     $nama_gambar = uniqid() . '.' . $gambar->getClientOriginalExtension();
-        //     $lokasi_gambar = public_path('images/produk/' . $nama_gambar);
-
-        //     // Proses gambar menggunakan Intervention Image
-        //     // Image::make($gambar)->resize(300, 200)->save($lokasi_gambar);
-
-        //     // Perbarui kolom gambar di database
-        //     Produk::where('id', $id)->update(['gambar' => $nama_gambar]);
-        // }
-        
-        // // Lakukan pembaruan data produk berdasarkan ID
-        // Produk::where('id', $id)->update([
-        //     'nama_barang' => $nama_barang,
-        //     'slug' => $slug,
-        //     'harga' => $harga,
-        //     'kategori' => $kategori,
-        //     'tag' => $tag,
-        //     'deskripsi' => $deskripsi,
-        //     // Tambahkan pembaruan data gambar produk jika diperlukan
-        // ]);
 
         // Tanggapi sukses jika berhasil memperbarui data produk
         return redirect()->back()->with('success', 'Produk berhasil diubah!');
@@ -176,8 +176,30 @@ class AdminController extends BaseController
     public function hapus($id)
     {
         try {
-            // Gantilah 'Item' dengan model yang sesuai
+            // Temukan produk berdasarkan ID
             $produk = Produk::findOrFail($id);
+    
+            // Hapus gambar terkait jika ada
+            if (!empty($produk->gambar)) {
+                $gambarPath = public_path('images/produk/' . $produk->gambar);
+    
+                // Hapus gambar dari sistem file
+                if (file_exists($gambarPath)) {
+                    unlink($gambarPath);
+                }
+            }
+            // Hapus gambar terkait jika ada di folder images/produk/cut
+            if (!empty($produk->gambar)) {
+                $gambarPathCut = public_path('images/produk/cut/' . $produk->gambar);
+
+                // Hapus gambar dari sistem file
+                if (file_exists($gambarPathCut)) {
+                    unlink($gambarPathCut);
+                }
+            }
+
+    
+            // Hapus produk itu sendiri
             $produk->delete();
     
             return redirect()->back()->with('success', 'Item berhasil dihapus');
@@ -185,6 +207,8 @@ class AdminController extends BaseController
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus item');
         }
     }
+    
+    
     
 }
 
